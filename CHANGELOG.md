@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.2
+
+* Added explicit `platforms` declaration (Android, iOS, Web, macOS) to fix pub.dev platform support score.
+* Migrated `google_sign_in` usage to v7 API (`GoogleSignIn.instance`, `authenticate()`, `authorizationClient`).
+
+## 0.1.1
+
+* Updated dependencies to latest versions:
+  * `firebase_core` → `^4.10.0`
+  * `firebase_auth` → `^6.5.2`
+  * `cloud_firestore` → `^6.5.0`
+  * `google_sign_in` → `^7.2.0`
+
 ## 0.1.0
 
 * **Breaking:** Bumped version to `0.1.0` — first public release on pub.dev.

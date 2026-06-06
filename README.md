@@ -26,7 +26,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  firebase_auth_kit: ^0.1.0
+  firebase_auth_kit: ^0.1.2
 ```
 
 Then run:

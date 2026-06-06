@@ -1,29 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/auth_theme.dart';
 
-/// Color customisation for all auth UI widgets.
-///
-/// Pass an instance to [AuthUIConfig.colorScheme] to override any or all
-/// of the default indigo/violet palette.
-///
-/// Every field is optional — unset fields fall back to the built-in defaults
-/// from [AuthTheme].
-///
-/// ### Quick example — green theme
-/// ```dart
-/// AuthUIConfig(
-///   colorScheme: AuthColorScheme(
-///     primary: Color(0xFF16A34A),
-///     primaryGradient: LinearGradient(
-///       colors: [Color(0xFF16A34A), Color(0xFF15803D)],
-///       begin: Alignment.topLeft,
-///       end: Alignment.bottomRight,
-///     ),
-///     buttonColor: Color(0xFF16A34A),
-///     inputFocusBorderColor: Color(0xFF16A34A),
-///   ),
-/// )
-/// ```
+
 class AuthColorScheme {
   // ── Brand ──────────────────────────────────────────────────────────────
 

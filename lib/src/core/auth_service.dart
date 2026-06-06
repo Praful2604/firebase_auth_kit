@@ -52,14 +52,42 @@ class AuthService {
   /// Returns `null` if the user cancels the Google sign-in flow.
   /// Throws a [FirebaseAuthException] on failure.
   Future<User?> signInWithGoogle() async {
-    final googleUser = await GoogleSignIn().signIn();
-    if (googleUser == null) return null;
+    final googleSignIn = GoogleSignIn.instance;
+    await googleSignIn.initialize();
 
-    final googleAuth = await googleUser.authentication;
+    GoogleSignInAccount? googleUser;
+
+    if (googleSignIn.supportsAuthenticate()) {
+      try {
+        googleUser = await googleSignIn.authenticate();
+      } on GoogleSignInException catch (e) {
+        if (e.code == GoogleSignInExceptionCode.canceled) return null;
+        rethrow;
+      }
+    } else {
+      // On platforms that don't support authenticate() (e.g. web),
+      // wait for a sign-in event from the authentication stream.
+      final event = await googleSignIn.authenticationEvents
+          .firstWhere((e) => e is GoogleSignInAuthenticationEventSignIn);
+      googleUser = (event as GoogleSignInAuthenticationEventSignIn).user;
+    }
+
+    // Authorize scopes to get the access token for Firebase.
+    final authClient = googleUser.authorizationClient;
+    GoogleSignInClientAuthorization? authorization;
+    try {
+      authorization = await authClient.authorizationForScopes(
+            const ['email', 'profile'],
+          ) ??
+          await authClient.authorizeScopes(const ['email', 'profile']);
+    } on GoogleSignInException catch (e) {
+      if (e.code == GoogleSignInExceptionCode.canceled) return null;
+      rethrow;
+    }
 
     final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
+      accessToken: authorization.accessToken,
+      idToken: googleUser.authentication.idToken,
     );
 
     final userCred = await _auth.signInWithCredential(credential);
